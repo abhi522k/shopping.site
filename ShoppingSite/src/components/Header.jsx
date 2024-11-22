@@ -1,9 +1,13 @@
 import { CgProfile } from "react-icons/cg";
 import { FaHeart } from "react-icons/fa";
 import { IoBagAdd } from "react-icons/io5";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 const Header = () => {
+  const bag = useSelector((store) => store.bag);
+  console.log(bag);
+
   return (
     <header>
       <div className="logo_container">
@@ -46,7 +50,7 @@ const Header = () => {
         <Link className="action_container" to="/bag">
           <IoBagAdd />
           <span className="action_name">Bag</span>
-          <span className="bag-item-count">0</span>
+          <span className="bag-item-count">{bag.length}</span>
         </Link>
       </div>
     </header>

@@ -1,6 +1,26 @@
+import { useSelector } from "react-redux";
+
 const BagSummary = () => {
+  const bagItems = useSelector((store) => store.bag);
+  const items = useSelector((store) => store.items);
+
+  const finalItems = items.filter((item) => {
+    const itemIndexStatus = bagItems.indexOf(item.id);
+    return itemIndexStatus >= 0;
+  });
+
+  const Convenience_Fee = bagItems.length > 0 ? 99 : 0;
+  let totalMRP = 0;
+  let totalDiscount = 0;
+
+  finalItems.forEach((item) => {
+    totalMRP += item.original_price;
+    totalDiscount += item.original_price - item.current_price;
+  });
+
+  let finalPayment = totalMRP - totalDiscount + Convenience_Fee;
+
   const item = {
-    totalItem: 3,
     totalMRP: 1500,
     totalDiscount: 500,
     finalPayment: 100,
@@ -10,26 +30,26 @@ const BagSummary = () => {
     <>
       <div className="bag-details-container">
         <div className="price-header">
-          PRICE DETAILS ({item.totalItem} Items){" "}
+          PRICE DETAILS ({bagItems.length} Items){" "}
         </div>
         <div className="price-item">
           <span className="price-item-tag">Total MRP</span>
-          <span className="price-item-value">₹{item.totalMRP}</span>
+          <span className="price-item-value">₹{totalMRP}</span>
         </div>
         <div className="price-item">
           <span className="price-item-tag">Discount on MRP</span>
           <span className="price-item-value priceDetail-base-discount">
-            -₹{item.totalDiscount}
+            -₹{totalDiscount}
           </span>
         </div>
         <div className="price-item">
           <span className="price-item-tag">Convenience Fee</span>
-          <span className="price-item-value">₹99</span>
+          <span className="price-item-value">₹{Convenience_Fee}</span>
         </div>
         <hr />
         <div className="price-footer">
           <span className="price-item-tag">Total Amount</span>
-          <span className="price-item-value">₹{item.finalPayment}</span>
+          <span className="price-item-value">₹{finalPayment}</span>
         </div>
       </div>
       <button className="btn-place-order">
